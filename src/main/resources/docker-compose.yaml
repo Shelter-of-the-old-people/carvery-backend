@@ -1,0 +1,15 @@
+version: '3'
+services:
+  mariadb:
+    image: mariadb:11.7.2-MariaDB-ubu2404
+    container_name: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+volumes:
+  db-data:
+    external: true  # 이미 생성한 볼륨을 사용한다고 명시
