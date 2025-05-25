@@ -12,9 +12,11 @@ public class CarWashController {
 
     private final CarWashService carWashService;
 
+    // 현재 위치를 보내줌
     @GetMapping("/location")
-    public ResponseEntity<?> responseCarWash(@RequestParam double latitude, @RequestParam double longitude) {
-        carWashService.resCarwashInfo(latitude, longitude);
+    public ResponseEntity<?> responseCarWash(@RequestParam double lat, @RequestParam double lon) {
+
+        carWashService.resCarwashInfo(lat, lon);
 
         return ResponseEntity.ok("test");
     }
