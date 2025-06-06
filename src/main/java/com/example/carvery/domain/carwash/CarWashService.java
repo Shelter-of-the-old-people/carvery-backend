@@ -1,31 +1,38 @@
 package com.example.carvery.domain.carwash;
 
+import com.example.carvery.domain.carwash.DTO.CarWashDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CarWashService {
 
-    public void resCarwashInfo(double lat, double lon) {
-        BoundingBox boundingBox = calculateBoundingBox(lat, lon, 10.0);
+    private final CarWashRepository carWashRepository;
+    private final CarWashUtils carWashUtils;  // 주입 추가
 
+    public List<CarWashDto> findNearbyCarWash(double userLat, double userLng) {
+        List<CarWashInfo> nearbyCarWash = carWashRepository.findWithinRadius(userLat, userLng, 10.0);
 
-
+        return nearbyCarWash.stream()
+                .map(carWash -> convertToDto(carWash, userLat, userLng))
+                .collect(Collectors.toList());
     }
 
-    private BoundingBox calculateBoundingBox(double latitude, double longitude, double radiusKm) {
-        // 위도 범위 계산
-        double deltaLat = radiusKm / 111.32;
-
-        // 경도 범위 계산 (위도에 따른 조정 필요)
-        double deltaLon = radiusKm / (111.32 * Math.cos(Math.toRadians(latitude)));
-
-        double minLat = latitude - deltaLat;
-        double maxLat = latitude + deltaLat;
-        double minLon = longitude - deltaLon;
-        double maxLon = longitude + deltaLon;
-
-        return new BoundingBox(minLat, maxLat, minLon, maxLon);
+    private CarWashDto convertToDto(CarWashInfo carWash, double userLat, double userLng) {
+        return CarWashDto.builder()
+                .title(carWash.getCarWashName())
+                .address(carWash.getCarWashAddress())
+                .dist(String.format("%.1f",
+                        carWashUtils.calculateDistance(userLat, userLng, carWash.getCarWashLatitude(), carWash.getCarWashLongitude())))
+                .infos(carWashUtils.parseWashTypes(carWash.getCarWashType()))  // 수정된 부분
+                .call(carWash != null ? carWash.getPhoneNumber() : "정보없음")
+                .productImage(carWash.getImageUrl() != null ? carWash.getImageUrl() :
+                        carWashUtils.getDefaultImage(carWash.getBusinessType()))
+                .businessHours("정보없음")
+                .build();
     }
 }

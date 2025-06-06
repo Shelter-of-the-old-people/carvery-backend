@@ -1,9 +1,15 @@
 package com.example.carvery.domain.carwash;
 
 import jakarta.persistence.*;
+import lombok.*;
 
+@Getter
+@Setter
+@Builder
 @Entity
 @Table(name = "car_wash_info")
+@NoArgsConstructor
+@AllArgsConstructor
 public class CarWashInfo {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,5 +33,7 @@ public class CarWashInfo {
     @Column(name = "WGS84경도")
     private Double carWashLongitude;
 
+    @Column(name = "세차장전화번호")
+    private Double carWashCallNumber;
 
 }
