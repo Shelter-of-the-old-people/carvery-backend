@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class CarWashUtils {
@@ -25,39 +26,39 @@ public class CarWashUtils {
 
     // 세차 타입 파싱
     public List<WashType> parseWashTypes(String washType) {
-        List<WashType> infos = new ArrayList<>();
 
-        String lowerWashType = washType.toLowerCase();
+        return Optional.ofNullable(washType)
+                .filter(type -> !type.trim().isEmpty())
+                .map(type -> {
+                    List<WashType> infos = new ArrayList<>();
+                    String lowerWashType = type.toLowerCase();
 
-        if (lowerWashType.contains("자동세차") || lowerWashType.contains("자동")) {
-            infos.add(WashType.AutomaticCarWash);
-        }
-        if (lowerWashType.contains("손세차")) {
-            infos.add(WashType.HandCarWash);
-        }
-        if (lowerWashType.contains("셀프세차") || lowerWashType.contains("셀프")) {
-            infos.add(WashType.SelfCarWash);
-        }
-        if (lowerWashType.contains("스팀세차") || lowerWashType.contains("스팀")) {
-            infos.add(WashType.SteamCarWash);
-        }
-        if (lowerWashType.contains("운송세차") || lowerWashType.contains("운송")) {
-            infos.add(WashType.TransportCarWash);
-        }
-        if (lowerWashType.contains("일반세차") || lowerWashType.contains("일반")) {
-            infos.add(WashType.GeneralCarWash);
-        }
+                    if (lowerWashType.contains("자동세차") || lowerWashType.contains("자동")) {
+                        infos.add(WashType.AutomaticCarWash);
+                    }
+                    if (lowerWashType.contains("손세차")) {
+                        infos.add(WashType.HandCarWash);
+                    }
+                    if (lowerWashType.contains("셀프세차") || lowerWashType.contains("셀프")) {
+                        infos.add(WashType.SelfCarWash);
+                    }
+                    if (lowerWashType.contains("스팀세차") || lowerWashType.contains("스팀")) {
+                        infos.add(WashType.SteamCarWash);
+                    }
+                    if (lowerWashType.contains("운송세차") || lowerWashType.contains("운송")) {
+                        infos.add(WashType.TransportCarWash);
+                    }
+                    if (lowerWashType.contains("일반세차") || lowerWashType.contains("일반")) {
+                        infos.add(WashType.GeneralCarWash);
+                    }
 
-        // 기본값: 매칭되는 타입이 없으면 일반세차로 설정
-        if (infos.isEmpty()) {
-            infos.add(WashType.GeneralCarWash);
-        }
-
-        return infos;
+                    return infos.isEmpty() ? List.of(WashType.GeneralCarWash) : infos;
+                })
+                .orElse(List.of(WashType.GeneralCarWash));
     }
 
     // 기본 이미지 설정
     public String getDefaultImage() {
-        return "https://kixxman.com/files/attach/images/140/820/005/7c05df79f4485a77bfa89bf69f347f11.jpg";
+        return "https://www.logoyogo.com/web/wp-content/uploads/edd/2021/03/logoyogo-1-122.jpg";
     }
 }

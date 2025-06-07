@@ -19,6 +19,7 @@ public interface CarWashRepository extends JpaRepository<CarWashInfo, Integer> {
         cos(radians(WGS84경도) - radians(?2)) + sin(radians(?1)) * 
         sin(radians(WGS84위도)))) <= ?3
         ORDER BY distance
+        LIMIT ?4
         """, nativeQuery = true)
-    List<CarWashInfo> findWithinRadius(double lat, double lng, double radiusKm);
+    List<CarWashInfo> findNearestCarWash(double lat, double lng, double radiusKm, int limit);
 }

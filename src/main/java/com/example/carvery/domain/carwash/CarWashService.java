@@ -17,7 +17,7 @@ public class CarWashService {
     private final CarWashEnhancer carWashEnhancer;
 
     public List<CarWashDto> findNearbyCarWash(double userLat, double userLng) {
-        List<CarWashInfo> nearbyCarWash = carWashRepository.findWithinRadius(userLat, userLng, 10.0);
+        List<CarWashInfo> nearbyCarWash = carWashRepository.findNearestCarWash(userLat, userLng, 8.0, 20);
 
         return nearbyCarWash.stream()
                 .map(carWash -> convertToDto(carWash, userLat, userLng))
@@ -34,20 +34,18 @@ public class CarWashService {
                 .call(carWash.getCarWashCallNumber() != null ? carWash.getCarWashCallNumber() : "정보없음")
                 .productImage(getImageUrl(carWash))  // 수정된 부분
                 .businessHours("정보없음")
+                .offDutyDay(carWash.getOffDutyDay())
                 .build();
     }
 
     private String getImageUrl(CarWashInfo carWash) {
-        if (carWashEnhancer.canMakeApiCall()) {
             PlaceDetails placeDetails = carWashEnhancer.getPlaceImageOnly(
                     carWash.getCarWashName(),
-                    carWash.getCarWashAddress()
-            );
+                    carWash.getCarWashAddress());
 
             if (placeDetails != null && placeDetails.getPhotoUrl() != null) {
                 return placeDetails.getPhotoUrl();
             }
-        }
 
         // 3. 모든 방법이 실패하면 기본 이미지
         return carWashUtils.getDefaultImage();

@@ -22,7 +22,7 @@ public class CarWashInfo {
     private String carWashBusinessType;
 
     @Column(name = "세차유형")
-    private String carWashType;
+    private String carWashType = "일반세차";
 
     @Column(name = "소재지도로명주소")
     private String carWashAddress;
