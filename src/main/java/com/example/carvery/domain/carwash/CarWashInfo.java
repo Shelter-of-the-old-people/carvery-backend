@@ -34,6 +34,8 @@ public class CarWashInfo {
     private Double carWashLongitude;
 
     @Column(name = "세차장전화번호")
-    private Double carWashCallNumber;
+    private String carWashCallNumber;
 
+    @Column(name = "휴무일")
+    private String offDutyDay;
 }

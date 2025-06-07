@@ -57,9 +57,7 @@ public class CarWashUtils {
     }
 
     // 기본 이미지 설정
-    public String getDefaultImage(String businessType) {
-        return businessType.contains("주유소") ?
-                "https://kixxman.com/files/attach/images/140/820/005/7c05df79f4485a77bfa89bf69f347f11.jpg" :
-                "/images/carwash-default.png";
+    public String getDefaultImage() {
+        return "https://kixxman.com/files/attach/images/140/820/005/7c05df79f4485a77bfa89bf69f347f11.jpg";
     }
 }

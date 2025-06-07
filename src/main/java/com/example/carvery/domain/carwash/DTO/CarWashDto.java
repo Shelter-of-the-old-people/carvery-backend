@@ -12,5 +12,6 @@ public class CarWashDto {
     private String address;
     private List<WashType> infos;
     private String call;
-    private String businessHours;  // 추가
+    private String businessHours;
+    private String offDutyDay;
 }
