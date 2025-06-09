@@ -16,7 +16,6 @@ public class NaverShopSearch {
     private final String clientSecret = "eSi52X0nCH";
 
     public String search(String query) {
-        // 직접 쿼리스트링 붙이기
         String apiUrl = "https://openapi.naver.com/v1/search/shop.json?query=" + query + "&display=20";
 
         HttpHeaders headers = new HttpHeaders();
