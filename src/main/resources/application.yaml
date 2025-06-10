@@ -20,6 +20,7 @@ spring:
     database-platform: org.hibernate.dialect.MariaDBDialect
     open-in-view: false
 
+
 # Google API 설정 (무료 한도)
 google:
   api:
@@ -40,3 +41,7 @@ springdoc:
     resolve-schema-properties: true
   cache:
     disabled: true
+
+server:
+  port: 8080
+  address: 0.0.0.0

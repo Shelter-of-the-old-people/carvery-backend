@@ -22,7 +22,7 @@ public class SecurityConfig{
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((req) -> req
                         .requestMatchers("/api/**","/error").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement((sess) -> sess
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));

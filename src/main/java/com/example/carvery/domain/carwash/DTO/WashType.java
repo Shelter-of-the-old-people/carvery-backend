@@ -12,7 +12,7 @@ public enum WashType {
     AutomaticCarWash("자동세차"),
     GeneralCarWash("일반세차"),
     SteamCarWash("스팀세차"),
-    TransportCarWash("운송세차"),
+    TransportCarWash("운수세차"),
     SelfCarWash("셀프세차");
 
     private final String korean;
