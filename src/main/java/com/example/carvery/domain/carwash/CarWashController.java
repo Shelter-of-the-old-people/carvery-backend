@@ -21,9 +21,10 @@ public class CarWashController {
     @GetMapping("/nearby")
     public ResponseEntity<List<CarWashDto>> getNearbyCarWash(
             @RequestParam double lat,
-            @RequestParam double lng) {
+            @RequestParam double lng,
+            @RequestParam String address) {
 
-        List<CarWashDto> result = carWashService.findNearbyCarWash(lat, lng);
+        List<CarWashDto> result = carWashService.findNearbyCarWash(lat, lng, address);
         return ResponseEntity.ok(result);
     }
 }

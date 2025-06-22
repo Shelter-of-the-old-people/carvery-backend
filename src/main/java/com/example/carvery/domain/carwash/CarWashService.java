@@ -16,8 +16,8 @@ public class CarWashService {
     private final CarWashUtils carWashUtils;
     private final CarWashEnhancer carWashEnhancer;
 
-    public List<CarWashDto> findNearbyCarWash(double userLat, double userLng) {
-        List<CarWashInfo> nearbyCarWash = carWashRepository.findNearestCarWash(userLat, userLng, 8.0, 20);
+    public List<CarWashDto> findNearbyCarWash(double userLat, double userLng, String address) {
+        List<CarWashInfo> nearbyCarWash = carWashRepository.findNearestCarWash(userLat, userLng, 8.0, 15);
 
         return nearbyCarWash.stream()
                 .map(carWash -> convertToDto(carWash, userLat, userLng))
@@ -28,9 +28,8 @@ public class CarWashService {
         return CarWashDto.builder()
                 .title(carWash.getCarWashName())
                 .address(carWash.getCarWashAddress())
-                .dist(String.format("%.1f",
-                        carWashUtils.calculateDistance(userLat, userLng, carWash.getCarWashLatitude(), carWash.getCarWashLongitude())))
-                .infos(carWashUtils.parseWashTypes(carWash.getCarWashType()))
+                .dist(carWashUtils.calculateDistance(userLat, userLng, carWash.getCarWashLatitude(), carWash.getCarWashLongitude()))
+
                 .call(carWash.getCarWashCallNumber() != null ? carWash.getCarWashCallNumber() : "정보없음")
                 .productImage(getImageUrl(carWash))  // 수정된 부분
                 .businessHours("정보없음")
