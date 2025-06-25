@@ -2,15 +2,19 @@ package com.example.carvery.domain.api;
 
 import com.example.carvery.domain.carwash.CarWashUtils;
 import com.example.carvery.domain.carwash.DTO.CarWashDto;
+import com.example.carvery.domain.carwash.DTO.WashType;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Getter
 @Setter
 @Builder
@@ -54,6 +58,13 @@ public class NaverMapResDto {
         private String detailInfo;
     }
 
+    // 세차 타입 정보를 문자열 리스트로 반환
+    public List<String> getWashTypeInfos() {
+        return WashType.fromCategoryList(category).stream()
+                .map(WashType::getKorean)
+                .collect(Collectors.toList());
+    }
+
     public static List<NaverMapResDto> parseFirstPlace(String jsonData) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -75,16 +86,17 @@ public class NaverMapResDto {
                     .id(node.path("id").asText())
                     .name(node.path("name").asText())
                     .tel(node.path("tel").asText())
-                    .category(objectMapper.convertValue(node.path("category"), new TypeReference<>() {}))
+                    .category(objectMapper.convertValue(node.get("category"), new TypeReference<List<String>>() {}))
                     .address(node.path("address").asText())
                     .thumUrl(node.path("thumUrl").asText())
-                    .thumUrls(objectMapper.convertValue(node.path("thumUrls"), new TypeReference<>() {}))
+                    .thumUrls(objectMapper.convertValue(node.path("thumUrls"), new TypeReference<List<String>>() {}))
                     .x(node.path("x").asDouble())
                     .y(node.path("y").asDouble())
                     .businessStatus(objectMapper.convertValue(node.path("businessStatus"), BusinessStatus.class))
                     .bizhourInfo(node.path("bizhourInfo").asText())
                     .carWash(node.path("carWash").asText())
                     .build();
+            System.out.println(dto.getCategory());
             result.add(dto);
         }
 
@@ -101,7 +113,10 @@ public class NaverMapResDto {
                 .dist(carWashUtils.calculateDistance(userLat, userLng, naverMapResDto.getY(), naverMapResDto.getX()))
                 .call(naverMapResDto.getTel() != null ? naverMapResDto.getTel() : "정보없음")
                 .productImage(naverMapResDto.getThumUrl())
-                .businessHours(naverMapResDto.getBusinessStatus().getStatus().getDetailInfo())
+                .infos(naverMapResDto.getWashTypeInfos())
+                .businessHours(naverMapResDto.getBusinessStatus() != null &&
+                        naverMapResDto.getBusinessStatus().getStatus() != null ?
+                        naverMapResDto.getBusinessStatus().getStatus().getDetailInfo() : "정보없음")
                 .offDutyDay(naverMapResDto.getBizhourInfo())
                 .lat(naverMapResDto.getY())
                 .lon(naverMapResDto.getX())

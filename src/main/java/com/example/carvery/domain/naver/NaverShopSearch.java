@@ -35,8 +35,6 @@ public class NaverShopSearch {
         );
 
         System.out.println("▶ 요청 URL: " + apiUrl);
-        System.out.println("▶ 응답 코드: " + responseEntity.getStatusCodeValue());
-        System.out.println("▶ 응답 내용: " + responseEntity.getBody());
 
         return responseEntity.getBody();
     }

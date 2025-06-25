@@ -65,7 +65,6 @@ public class ApiService {
             JsonNode placeNode = root.path("result").path("place").path("list");
             String placeJson = objectMapper.writeValueAsString(placeNode);
 
-            log.info("placeJson: {}", placeJson);
             log.info("placeJson: {}", parseFirstPlace(placeJson).stream().toList());
             return parseFirstPlace(placeJson);
 
@@ -83,6 +82,4 @@ public class ApiService {
                 .sorted(Comparator.comparing(CarWashDto::getDist))
                 .collect(Collectors.toList());
     }
-
-
 }
